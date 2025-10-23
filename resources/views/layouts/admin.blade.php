@@ -28,7 +28,7 @@
             <div class="p-6">
                 <div class="flex items-center space-x-3 mb-8">
                     <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                        <i class="fas fa-plus text-ksr-red text-xl"></i>
+                         <img src="{{ asset('storage/img/image01.png') }}" alt="logo" class="w-8 h-8 object-contain">
                     </div>
                     <div>
                         <h2 class="font-bold">KSR PMI</h2>

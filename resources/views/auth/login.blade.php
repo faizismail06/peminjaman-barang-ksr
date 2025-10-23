@@ -25,7 +25,7 @@
         <!-- Logo/Header -->
         <div class="text-center mb-8">
             <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <i class="fas fa-plus text-ksr-red text-4xl"></i>
+                 <img src="{{ asset('storage/img/image01.png') }}" alt="logo" class="w-14 h-14 object-contain">
             </div>
             <h1 class="text-3xl font-bold text-white mb-2">KSR PMI Polines</h1>
             <p class="text-gray-200">Admin Panel Login</p>

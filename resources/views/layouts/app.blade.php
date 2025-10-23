@@ -28,9 +28,10 @@
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <a href="{{ route('home') }}" class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                            <i class="fas fa-plus text-ksr-red text-xl"></i>
+                        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+                            <img src="{{ asset('storage/img/image01.png') }}" alt="icon" class="w-10 h-10 object-contain">
                         </div>
+
                         <span class="text-white font-bold text-lg">KSR PMI Polines</span>
                     </a>
                 </div>
