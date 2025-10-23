@@ -44,7 +44,8 @@
     @if($items->count() > 0)
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
             @foreach($items as $item)
-                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1 flex flex-col">
+                    <!-- Gambar -->
                     <div class="h-48 bg-gray-200 flex items-center justify-center relative">
                         @if($item->photo)
                             <img src="{{ asset('storage/' . $item->photo) }}" alt="{{ $item->name }}" class="w-full h-full object-cover">
@@ -57,7 +58,9 @@
                             </div>
                         @endif
                     </div>
-                    <div class="p-4">
+
+                    <!-- Konten -->
+                    <div class="p-4 flex flex-col flex-grow">
                         <div class="flex justify-between items-start mb-2">
                             <span class="inline-block bg-ksr-red/10 text-ksr-red px-2 py-1 rounded-full text-xs font-semibold">
                                 {{ $item->category }}
@@ -66,7 +69,8 @@
                         </div>
                         <h3 class="text-lg font-bold text-gray-800 mb-2">{{ $item->name }}</h3>
                         <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ $item->description ?? 'Tidak ada deskripsi' }}</p>
-                        <div class="flex justify-between items-center mb-3">
+                        
+                        <div class="flex justify-between items-center mb-4">
                             <div>
                                 <p class="text-xs text-gray-500">Tersedia</p>
                                 <p class="text-sm font-bold text-ksr-red">{{ $item->available_quantity }}/{{ $item->total_quantity }} unit</p>
@@ -75,20 +79,29 @@
                                 {{ $item->condition }}
                             </span>
                         </div>
-                        @if($item->available_quantity > 0)
-                            <a href="{{ route('borrowings.create', ['item' => $item->id]) }}" 
-                               class="block w-full bg-ksr-red text-white text-center px-4 py-2 rounded-lg hover:bg-ksr-maroon transition">
-                                <i class="fas fa-hand-holding mr-1"></i>Pinjam
-                            </a>
-                        @else
-                            <button disabled class="block w-full bg-gray-400 text-white text-center px-4 py-2 rounded-lg cursor-not-allowed">
-                                Tidak Tersedia
-                            </button>
-                        @endif
+
+                        <!-- Tombol (nempel di bawah) -->
+                        <div class="mt-auto">
+                            @if($item->available_quantity > 0)
+                                <a href="{{ route('borrowings.create', ['item' => $item->id]) }}"
+                                    class="flex items-center justify-center gap-2 w-full bg-ksr-red text-white px-4 py-2 rounded-lg hover:bg-ksr-maroon transition">
+                                    <i class="fas fa-file-alt text-base self-center"></i>
+                                    <span class="leading-none">Pinjam</span>
+                                </a>
+                            @else
+                                <button disabled 
+                                    class="flex items-center justify-center gap-2 w-full bg-gray-400 text-white text-center px-4 py-2 rounded-lg cursor-not-allowed">
+                                    <i class="fas fa-times-circle"></i>
+                                    <span>Tidak Tersedia</span>
+                                </button>
+                            @endif
+                        </div>
+
                     </div>
                 </div>
             @endforeach
         </div>
+
 
         <!-- Pagination -->
         <div class="mt-8">

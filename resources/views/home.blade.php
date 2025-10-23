@@ -14,9 +14,6 @@
                 Kami siap mendukung kegiatan kemanusiaan Anda.
             </p>
             <div class="flex justify-center space-x-4">
-                <a href="{{ route('borrowings.create') }}" class="bg-ksr-red text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700 transition">
-                    <i class="fas fa-file-alt mr-1"></i> Ajukan Peminjaman
-                </a>
                 <a href="{{ route('katalog') }}" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-bold hover:bg-white hover:text-ksr-red transition">
                     <i class="fas fa-box mr-2"></i>Lihat Katalog
                 </a>
@@ -26,31 +23,26 @@
 </div>
 
 <!-- Stats Section -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-lg shadow-lg p-6 text-center">
-            <div class="w-16 h-16 bg-ksr-red/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-box text-ksr-red text-3xl"></i>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white rounded-xl shadow-lg p-8 text-center">
+            <div class="w-20 h-20 bg-ksr-red/10 rounded-full flex items-center justify-center mx-auto mb-5">
+                <i class="fas fa-box text-ksr-red text-4xl"></i>
             </div>
-            <h3 class="text-3xl font-bold text-gray-800">{{ \App\Models\Item::count() }}</h3>
-            <p class="text-gray-600">Total Barang</p>
+            <h3 class="text-4xl font-bold text-gray-800">{{ \App\Models\Item::count() }}</h3>
+            <p class="text-gray-600 text-lg">Total Barang</p>
         </div>
-        <div class="bg-white rounded-lg shadow-lg p-6 text-center">
-            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-check-circle text-green-600 text-3xl"></i>
+        
+        <div class="bg-white rounded-xl shadow-lg p-8 text-center">
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-5">
+                <i class="fas fa-check-circle text-green-600 text-4xl"></i>
             </div>
-            <h3 class="text-3xl font-bold text-gray-800">{{ \App\Models\Item::where('available_quantity', '>', 0)->count() }}</h3>
-            <p class="text-gray-600">Barang Tersedia</p>
-        </div>
-        <div class="bg-white rounded-lg shadow-lg p-6 text-center">
-            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-clipboard-list text-blue-600 text-3xl"></i>
-            </div>
-            <h3 class="text-3xl font-bold text-gray-800">{{ \App\Models\Borrowing::count() }}</h3>
-            <p class="text-gray-600">Total Peminjaman</p>
+            <h3 class="text-4xl font-bold text-gray-800">{{ \App\Models\Item::where('available_quantity', '>', 0)->count() }}</h3>
+            <p class="text-gray-600 text-lg">Barang Tersedia</p>
         </div>
     </div>
 </div>
+
 
 <!-- Available Items Section -->
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

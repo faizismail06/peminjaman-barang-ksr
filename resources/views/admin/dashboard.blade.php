@@ -12,7 +12,7 @@
             </div>
             <div class="ml-4">
                 <p class="text-sm text-gray-500">Total Barang</p>
-                <p class="text-2xl font-bold text-gray-800">{{ $totalBarang }}</p>
+                <p class="text-2xl font-bold text-gray-800">{{ $totalItems }}</p>
             </div>
         </div>
     </div>
@@ -24,7 +24,7 @@
             </div>
             <div class="ml-4">
                 <p class="text-sm text-gray-500">Pending</p>
-                <p class="text-2xl font-bold text-gray-800">{{ $pendingPeminjaman }}</p>
+                <p class="text-2xl font-bold text-gray-800">{{ $pendingBorrowings }}</p>
             </div>
         </div>
     </div>
@@ -36,7 +36,7 @@
             </div>
             <div class="ml-4">
                 <p class="text-sm text-gray-500">Disetujui</p>
-                <p class="text-2xl font-bold text-gray-800">{{ $approvedPeminjaman }}</p>
+                <p class="text-2xl font-bold text-gray-800">{{ $approvedBorrowings }}</p>
             </div>
         </div>
     </div>
@@ -48,7 +48,7 @@
             </div>
             <div class="ml-4">
                 <p class="text-sm text-gray-500">Total Peminjaman</p>
-                <p class="text-2xl font-bold text-gray-800">{{ $totalPeminjaman }}</p>
+                <p class="text-2xl font-bold text-gray-800">{{ $totalBorrowings }}</p>
             </div>
         </div>
     </div>
@@ -58,9 +58,9 @@
     <!-- Recent Peminjaman -->
     <div class="bg-white rounded-lg shadow-md p-6">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Peminjaman Terbaru</h2>
-        @if($recentPeminjamans->count() > 0)
+        @if($recentBorrowings->count() > 0)
             <div class="space-y-4">
-                @foreach($recentPeminjamans as $borrowing)
+                @foreach($recentBorrowings as $borrowing)
                     <div class="border-l-4 {{ $borrowing->status == 'pending' ? 'border-yellow-500' : ($borrowing->status == 'approved' ? 'border-green-500' : 'border-gray-500') }} pl-4 py-2">
                         <div class="flex justify-between items-start">
                             <div>
@@ -90,9 +90,9 @@
     <!-- Low Stock Alert -->
     <div class="bg-white rounded-lg shadow-md p-6">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Peringatan Stok Rendah</h2>
-        @if($lowStockBarangs->count() > 0)
+        @if($lowStockItems->count() > 0)
             <div class="space-y-4">
-                @foreach($lowStockBarangs as $item)
+                @foreach($lowStockItems as $item)
                     <div class="flex justify-between items-center p-4 bg-red-50 rounded-lg border border-red-200">
                         <div>
                             <p class="font-semibold text-gray-800">{{ $item->name }}</p>
@@ -125,7 +125,7 @@
     <a href="{{ route('admin.borrowings.index', ['status' => 'pending']) }}" class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-lg p-6 hover:from-yellow-600 hover:to-yellow-700 transition shadow-md">
         <i class="fas fa-hourglass-half text-3xl mb-2"></i>
         <h3 class="text-xl font-bold">Verifikasi Peminjaman</h3>
-        <p class="text-sm opacity-90">{{ $pendingPeminjaman }} pengajuan menunggu</p>
+        <p class="text-sm opacity-90">{{ $pendingBorrowings }} pengajuan menunggu</p>
     </a>
 
     <a href="{{ route('admin.items.index') }}" class="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-6 hover:from-purple-600 hover:to-purple-700 transition shadow-md">
