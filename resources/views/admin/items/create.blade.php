@@ -29,35 +29,6 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                    Kode Barang <span class="text-red-500">*</span>
-                </label>
-                <input type="text" name="code" value="{{ old('kode_barang') }}" required
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ksr-red focus:border-transparent @error('kode_barang') border-red-500 @enderror">
-                @error('kode_barang')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    Kategori <span class="text-red-500">*</span>
-                </label>
-                <select name="category" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ksr-red focus:border-transparent @error('kategori') border-red-500 @enderror">
-                    <option value="">Pilih Kategori</option>
-                    <option value="Medis" {{ old('kategori') == 'Medis' ? 'selected' : '' }}>Medis</option>
-                    <option value="Logistik" {{ old('kategori') == 'Logistik' ? 'selected' : '' }}>Logistik</option>
-                    <option value="Pelatihan" {{ old('kategori') == 'Pelatihan' ? 'selected' : '' }}>Pelatihan</option>
-                    <option value="Event" {{ old('kategori') == 'Event' ? 'selected' : '' }}>Event</option>
-                    <option value="Lainnya" {{ old('kategori') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
-                </select>
-                @error('kategori')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">
                     Jumlah Total <span class="text-red-500">*</span>
                 </label>
                 <input type="number" name="total_quantity" value="{{ old('jumlah_total', 0) }}" min="0" required
@@ -69,13 +40,24 @@
 
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Harga (Rp) <span class="text-red-500">*</span>
+                </label>
+                <input type="number" name="price" value="{{ old('price', 0) }}" min="0" step="0.01" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ksr-red focus:border-transparent @error('price') border-red-500 @enderror">
+                @error('price')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
                     Kondisi <span class="text-red-500">*</span>
                 </label>
                 <select name="condition" required
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ksr-red focus:border-transparent @error('kondisi') border-red-500 @enderror">
-                    <option value="Baik" {{ old('kondisi') == 'Good' ? 'selected' : '' }}>Baik</option>
-                    <option value="Rusak Ringan" {{ old('kondisi') == 'Minor Damage' ? 'selected' : '' }}>Rusak Ringan</option>
-                    <option value="Rusak Berat" {{ old('kondisi') == 'Major Damage' ? 'selected' : '' }}>Rusak Berat</option>
+                    <option value="Good" {{ old('kondisi') == 'Good' ? 'selected' : '' }}>Baik</option>
+                    <option value="Minor Damage" {{ old('kondisi') == 'Minor Damage' ? 'selected' : '' }}>Rusak Ringan</option>
+                    <option value="Major Damage" {{ old('kondisi') == 'Major Damage' ? 'selected' : '' }}>Rusak Berat</option>
                 </select>
                 @error('kondisi')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>

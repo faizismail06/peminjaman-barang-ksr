@@ -37,9 +37,10 @@
         <table class="w-full">
             <thead class="bg-gray-50 border-b">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Peminjam</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode / Peminjam</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barang</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Unit</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Biaya</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
@@ -49,16 +50,33 @@
                 @forelse($borrowings as $borrowing)
                     <tr class="hover:bg-gray-50">
                         <td class="px-6 py-4">
+                            <div class="text-xs font-mono text-blue-600 mb-1">{{ $borrowing->code_number }}</div>
                             <div class="text-sm font-medium text-gray-900">{{ $borrowing->borrower_name }}</div>
-                            <div class="text-sm text-gray-500">{{ $borrowing->email }}</div>
                             <div class="text-sm text-gray-500">{{ $borrowing->phone }}</div>
+                            <div class="text-sm text-gray-500">{{ $borrowing->organization }}</div>
                         </td>
                         <td class="px-6 py-4">
-                            <div class="text-sm font-medium text-gray-900">{{ $borrowing->item->name }}</div>
-                            <div class="text-sm text-gray-500">{{ $borrowing->item->code }}</div>
+                            @if($borrowing->borrowingItems->count() == 1)
+                                <div class="text-sm font-medium text-gray-900">{{ $borrowing->borrowingItems->first()->item->name }}</div>
+                                <div class="text-sm text-gray-500">{{ $borrowing->borrowingItems->first()->quantity }} unit</div>
+                            @else
+                                <div class="text-sm font-medium text-gray-900">{{ $borrowing->borrowingItems->count() }} jenis barang</div>
+                                <div class="text-sm text-gray-500">
+                                    @foreach($borrowing->borrowingItems->take(2) as $bItem)
+                                        • {{ $bItem->item->name }}<br>
+                                    @endforeach
+                                    @if($borrowing->borrowingItems->count() > 2)
+                                        <span class="text-blue-600">+{{ $borrowing->borrowingItems->count() - 2 }} lainnya</span>
+                                    @endif
+                                </div>
+                            @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900">{{ $borrowing->quantity }} unit</div>
+                            <div class="text-sm text-gray-900">{{ $borrowing->borrowingItems->sum('quantity') }} unit</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">Rp {{ number_format($borrowing->total_cost, 0, ',', '.') }}</div>
+                            <div class="text-sm text-gray-500">{{ $borrowing->total_days }} hari</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">{{ $borrowing->borrow_date->format('d/m/Y') }}</div>
@@ -81,7 +99,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-12 text-center text-gray-500">
+                        <td colspan="7" class="px-6 py-12 text-center text-gray-500">
                             <i class="fas fa-clipboard-list text-4xl mb-2"></i>
                             <p>Belum ada peminjaman</p>
                         </td>

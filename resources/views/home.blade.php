@@ -13,9 +13,12 @@
                 Ajukan peminjaman barang logistik KSR PMI dengan mudah dan cepat. 
                 Kami siap mendukung kegiatan kemanusiaan Anda.
             </p>
-            <div class="flex justify-center space-x-4">
+            <div class="flex justify-center space-x-4 flex-wrap gap-2">
                 <a href="{{ route('katalog') }}" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-lg font-bold hover:bg-white hover:text-ksr-red transition">
                     <i class="fas fa-box mr-2"></i>Lihat Katalog
+                </a>
+                <a href="{{ route('borrowings.track') }}" class="bg-white text-ksr-red px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition">
+                    <i class="fas fa-search mr-2"></i>Cek Status Peminjaman
                 </a>
             </div>
         </div>

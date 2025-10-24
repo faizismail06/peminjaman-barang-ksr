@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\BorrowingController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,11 +23,19 @@ use App\Http\Controllers\BorrowingController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/katalog', [HomeController::class, 'katalog'])->name('katalog');
 
+// Cart Routes
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add/{item}', [CartController::class, 'add'])->name('cart.add');
+Route::patch('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/{cart}', [CartController::class, 'remove'])->name('cart.remove');
+Route::delete('/cart', [CartController::class, 'clear'])->name('cart.clear');
+
 // Borrowing Routes (Public)
 Route::get('/borrowings', [BorrowingController::class, 'index'])->name('borrowings.index');
 Route::get('/borrowings/create', [BorrowingController::class, 'create'])->name('borrowings.create');
 Route::post('/borrowings', [BorrowingController::class, 'store'])->name('borrowings.store');
 Route::get('/borrowings/success', [BorrowingController::class, 'success'])->name('borrowings.success');
+Route::get('/borrowings/track', [BorrowingController::class, 'track'])->name('borrowings.track');
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login')->middleware('guest');

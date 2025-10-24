@@ -11,11 +11,11 @@ class Item extends Model
 
     protected $fillable = [
         'name',
-        'code',
         'description',
         'category',
         'total_quantity',
         'available_quantity',
+        'price',
         'condition',
         'photo',
     ];

@@ -65,7 +65,16 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <p class="font-semibold text-gray-800">{{ $borrowing->borrower_name }}</p>
-                                <p class="text-sm text-gray-600">{{ $borrowing->item->name }} ({{ $borrowing->quantity }} unit)</p>
+                                @if($borrowing->borrowingItems->count() > 0)
+                                    <p class="text-sm text-gray-600">
+                                        {{ $borrowing->borrowingItems->first()->item->name ?? 'N/A' }}
+                                        @if($borrowing->borrowingItems->count() > 1)
+                                            <span class="text-xs text-gray-500">+{{ $borrowing->borrowingItems->count() - 1 }} item lainnya</span>
+                                        @endif
+                                    </p>
+                                @else
+                                    <p class="text-sm text-gray-600">Tidak ada barang</p>
+                                @endif
                                 <p class="text-xs text-gray-500">{{ $borrowing->created_at->diffForHumans() }}</p>
                             </div>
                             <span class="px-3 py-1 rounded-full text-xs font-semibold

@@ -28,10 +28,10 @@ class ItemController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|unique:items,code',
             'description' => 'nullable|string',
             'category' => 'required|string',
             'total_quantity' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
             'condition' => 'required|string',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -61,10 +61,10 @@ class ItemController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|unique:items,code,' . $item->id,
             'description' => 'nullable|string',
             'category' => 'required|string',
             'total_quantity' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
             'condition' => 'required|string',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);

@@ -19,6 +19,21 @@
         }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        .animate-slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+    </style>
     @stack('styles')
 </head>
 <body class="bg-gray-50">
@@ -41,6 +56,15 @@
                     </a>
                     <a href="{{ route('katalog') }}" class="text-gray-200 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition">
                         <i class="fas fa-box mr-1"></i> Katalog
+                    </a>
+                    <a href="{{ route('cart.index') }}" class="text-gray-200 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition relative">
+                        <i class="fas fa-shopping-cart mr-1"></i> Keranjang
+                        @php
+                            $cartCount = \App\Models\Cart::where('session_id', session('cart_session_id', ''))->count();
+                        @endphp
+                        @if($cartCount > 0)
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">{{ $cartCount }}</span>
+                        @endif
                     </a>
                     
                     @auth
@@ -65,6 +89,21 @@
 
     <!-- Main Content -->
     <main>
+        <!-- Flash Messages -->
+        @if(session('success'))
+            <div id="flash-message" class="fixed top-20 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2 animate-slide-in">
+                <i class="fas fa-check-circle"></i>
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div id="flash-message" class="fixed top-20 right-4 z-50 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2 animate-slide-in">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>{{ session('error') }}</span>
+            </div>
+        @endif
+
         @yield('content')
     </main>
 
@@ -107,6 +146,20 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // Auto-hide flash messages after 3 seconds
+        const flashMessage = document.getElementById('flash-message');
+        if (flashMessage) {
+            setTimeout(() => {
+                flashMessage.style.transition = 'opacity 0.3s ease-out';
+                flashMessage.style.opacity = '0';
+                setTimeout(() => {
+                    flashMessage.remove();
+                }, 300);
+            }, 3000);
+        }
+    </script>
 
     @stack('scripts')
 </body>

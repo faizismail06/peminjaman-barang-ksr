@@ -20,8 +20,13 @@ class DashboardController extends Controller
         $pendingBorrowings = Borrowing::where('status', 'pending')->count();
         $approvedBorrowings = Borrowing::where('status', 'approved')->count();
 
-        $recentBorrowings = Borrowing::with('item')->latest()->take(5)->get();
-        $lowStockItems = Item::where('available_quantity', '<=', 5)->where('available_quantity', '>', 0)->get();
+        $recentBorrowings = Borrowing::with(['borrowingItems.item'])->latest()->take(5)->get();
+        $lowStockItems = Item::where('available_quantity', '<=', 5)
+            ->where('available_quantity', '>', 0)
+            ->orderBy('available_quantity', 'asc')
+            ->take(5)
+            ->get();
+
 
         return view('admin.dashboard', compact(
             'totalItems',

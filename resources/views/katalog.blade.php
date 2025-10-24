@@ -65,7 +65,6 @@
                             <span class="inline-block bg-ksr-red/10 text-ksr-red px-2 py-1 rounded-full text-xs font-semibold">
                                 {{ $item->category }}
                             </span>
-                            <span class="text-xs text-gray-500">{{ $item->code }}</span>
                         </div>
                         <h3 class="text-lg font-bold text-gray-800 mb-2">{{ $item->name }}</h3>
                         <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ $item->description ?? 'Tidak ada deskripsi' }}</p>
@@ -83,11 +82,15 @@
                         <!-- Tombol (nempel di bawah) -->
                         <div class="mt-auto">
                             @if($item->available_quantity > 0)
-                                <a href="{{ route('borrowings.create', ['item' => $item->id]) }}"
-                                    class="flex items-center justify-center gap-2 w-full bg-ksr-red text-white px-4 py-2 rounded-lg hover:bg-ksr-maroon transition">
-                                    <i class="fas fa-file-alt text-base self-center"></i>
-                                    <span class="leading-none">Pinjam</span>
-                                </a>
+                                <form action="{{ route('cart.add', $item) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit"
+                                        class="flex items-center justify-center gap-2 w-full bg-ksr-red text-white px-4 py-2 rounded-lg hover:bg-ksr-maroon transition">
+                                        <i class="fas fa-shopping-cart text-base self-center"></i>
+                                        <span class="leading-none">Tambah ke Keranjang</span>
+                                    </button>
+                                </form>
                             @else
                                 <button disabled 
                                     class="flex items-center justify-center gap-2 w-full bg-gray-400 text-white text-center px-4 py-2 rounded-lg cursor-not-allowed">
@@ -118,4 +121,3 @@
     @endif
 </div>
 @endsection
-

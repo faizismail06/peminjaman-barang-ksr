@@ -14,7 +14,13 @@
     <div class="lg:col-span-2">
         <div class="bg-white rounded-lg shadow-md p-8">
             <div class="flex justify-between items-start mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Detail Peminjaman</h2>
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">Detail Peminjaman</h2>
+                    <p class="text-gray-600 mt-1">
+                        <i class="fas fa-barcode mr-1"></i>
+                        <span class="font-mono font-semibold">{{ $borrowing->code_number }}</span>
+                    </p>
+                </div>
                 <span class="px-4 py-2 rounded-full text-sm font-semibold
                     {{ $borrowing->status == 'pending' ? 'bg-yellow-100 text-yellow-800' : '' }}
                     {{ $borrowing->status == 'approved' ? 'bg-green-100 text-green-800' : '' }}
@@ -36,16 +42,12 @@
                         <p class="font-medium text-gray-800">{{ $borrowing->borrower_name }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-500">Email</p>
-                        <p class="font-medium text-gray-800">{{ $borrowing->email }}</p>
-                    </div>
-                    <div>
                         <p class="text-sm text-gray-500">No. Telepon</p>
                         <p class="font-medium text-gray-800">{{ $borrowing->phone }}</p>
                     </div>
-                    <div>
+                    <div class="col-span-2">
                         <p class="text-sm text-gray-500">Instansi</p>
-                        <p class="font-medium text-gray-800">{{ $borrowing->organization ?? '-' }}</p>
+                        <p class="font-medium text-gray-800">{{ $borrowing->organization }}</p>
                     </div>
                 </div>
             </div>
@@ -54,24 +56,38 @@
             <div class="mb-8">
                 <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
                     <i class="fas fa-box text-ksr-red mr-2"></i>
-                    Barang yang Dipinjam
+                    Barang yang Dipinjam ({{ $borrowing->borrowingItems->count() }} jenis)
                 </h3>
-                <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
-                    @if($borrowing->item->photo)
-                        <img src="{{ asset('storage/' . $borrowing->item->photo) }}" alt="{{ $borrowing->item->name }}" class="w-20 h-20 rounded object-cover">
-                    @else
-                        <div class="w-20 h-20 bg-gray-200 rounded flex items-center justify-center">
-                            <i class="fas fa-box text-gray-400 text-2xl"></i>
+                <div class="space-y-3">
+                    @foreach($borrowing->borrowingItems as $borrowingItem)
+                        <div class="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+                            @if($borrowingItem->item->photo)
+                                <img src="{{ asset('storage/' . $borrowingItem->item->photo) }}" alt="{{ $borrowingItem->item->name }}" class="w-16 h-16 rounded object-cover flex-shrink-0">
+                            @else
+                                <div class="w-16 h-16 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-box text-gray-400 text-xl"></i>
+                                </div>
+                            @endif
+                            <div class="flex-1">
+                                <h4 class="font-bold text-gray-800">{{ $borrowingItem->item->name }}</h4>
+                                <p class="text-sm text-gray-600">Kategori: {{ $borrowingItem->item->category }}</p>
+                                <p class="text-sm text-gray-600">{{ $borrowingItem->quantity }} unit × Rp {{ number_format($borrowingItem->price_per_day, 0, ',', '.') }}/hari × {{ $borrowing->total_days }} hari</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-lg font-bold text-ksr-red">Rp {{ number_format($borrowingItem->subtotal, 0, ',', '.') }}</p>
+                                <p class="text-xs text-gray-500">Subtotal</p>
+                            </div>
                         </div>
-                    @endif
-                    <div class="flex-1">
-                        <h4 class="font-bold text-gray-800">{{ $borrowing->item->name }}</h4>
-                        <p class="text-sm text-gray-600">{{ $borrowing->item->code }}</p>
-                        <p class="text-sm text-gray-600">Kategori: {{ $borrowing->item->category }}</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-2xl font-bold text-ksr-red">{{ $borrowing->quantity }}</p>
-                        <p class="text-sm text-gray-500">unit</p>
+                    @endforeach
+                    <div class="flex justify-between items-center p-4 bg-crimson text-white rounded-lg">
+                        <div>
+                            <p class="text-sm opacity-90">Total Unit: {{ $borrowing->borrowingItems->sum('quantity') }} unit</p>
+                            <p class="text-sm opacity-90">Durasi: {{ $borrowing->total_days }} hari</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs opacity-90">Total Biaya</p>
+                            <p class="text-2xl font-bold">Rp {{ number_format($borrowing->total_cost, 0, ',', '.') }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -93,8 +109,26 @@
                     </div>
                     <div class="col-span-2">
                         <p class="text-sm text-gray-500">Durasi</p>
-                        <p class="font-medium text-gray-800">{{ $borrowing->borrow_date->diffInDays($borrowing->return_date) }} hari</p>
+                        <p class="font-medium text-gray-800">{{ $borrowing->total_days }} hari</p>
                     </div>
+                </div>
+            </div>
+
+            <!-- SPJ Document -->
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-file-pdf text-ksr-red mr-2"></i>
+                    Dokumen SPJ
+                </h3>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    @if($borrowing->spj)
+                        <a href="{{ asset('storage/' . $borrowing->spj) }}" target="_blank" class="flex items-center text-blue-600 hover:text-blue-800">
+                            <i class="fas fa-download mr-2"></i>
+                            <span class="font-medium">Download SPJ.pdf</span>
+                        </a>
+                    @else
+                        <p class="text-gray-500">SPJ tidak tersedia</p>
+                    @endif
                 </div>
             </div>
 

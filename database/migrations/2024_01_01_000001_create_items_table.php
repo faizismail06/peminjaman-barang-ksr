@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('code')->unique();
             $table->text('description')->nullable();
             $table->string('category');
             $table->integer('total_quantity');
             $table->integer('available_quantity');
+            $table->decimal('price', 10, 2)->default(0); // Harga barang
             $table->string('condition')->default('Good'); // Good, Minor Damage, Major Damage
             $table->string('photo')->nullable();
             $table->timestamps();
