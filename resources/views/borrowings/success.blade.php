@@ -341,7 +341,7 @@ function printQR() {
                     background: #DC143C;
                     color: white;
                     padding: 30px;
-                    margin: -40px -40px 30px -40px;
+                    margin: -40px -40px 15px -40px;
                     border-radius: 0;
                 }
                 .header h1 {
@@ -356,7 +356,7 @@ function printQR() {
                 .code {
                     font-size: 36px;
                     font-weight: bold;
-                    margin: 30px 0;
+                    margin: 10px 0;
                     color: #333;
                     letter-spacing: 2px;
                 }
@@ -371,15 +371,15 @@ function printQR() {
                 .qr-container img {
                     display: block;
                 }
-                .info {
-                    margin: 30px 0;
+              .info {
+                    margin: 20px 0;
                     background: #f8f9fa;
-                    padding: 25px;
+                    padding: 20px;
                     border-radius: 10px;
                     border-left: 5px solid #DC143C;
                 }
                 .info p {
-                    margin: 15px 0;
+                    margin: 10px 0;
                     font-size: 16px;
                     text-align: left;
                 }
@@ -407,7 +407,7 @@ function printQR() {
             <div class="code">{{ $borrowing ? $borrowing->code_number : '' }}</div>
             
             <div class="qr-container">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=350x350&data={{ $borrowing ? urlencode($borrowing->code_number) : '' }}" alt="QR Code">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={{ $borrowing ? urlencode($borrowing->code_number) : '' }}" alt="QR Code">
             </div>
             
             @if($borrowing)
