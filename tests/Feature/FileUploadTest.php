@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Cart;
 use App\Models\Item;
 use App\Models\User;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +17,8 @@ class FileUploadTest extends TestCase
 
     public function test_admin_can_create_item_with_photo(): void
     {
-        Storage::fake('public');
+        /** @var FilesystemAdapter $disk */
+        $disk = Storage::fake('public');
         $admin = User::factory()->create(['role' => 'admin']);
 
         $response = $this->actingAs($admin)->post(route('admin.items.store'), [
@@ -32,12 +34,13 @@ class FileUploadTest extends TestCase
         $response->assertRedirect(route('admin.items.index'));
         $item = Item::where('name', 'Kotak P3K')->firstOrFail();
         $this->assertNotNull($item->photo);
-        Storage::disk('public')->assertExists($item->photo);
+        $disk->assertExists($item->photo);
     }
 
     public function test_borrower_can_submit_spj_as_image(): void
     {
-        Storage::fake('public');
+        /** @var FilesystemAdapter $disk */
+        $disk = Storage::fake('public');
         $item = Item::create([
             'name' => 'Tandu Lipat',
             'category' => 'Medical',
@@ -61,12 +64,13 @@ class FileUploadTest extends TestCase
 
         $borrowing = \App\Models\Borrowing::firstOrFail();
         $response->assertRedirect(route('borrowings.success', ['code' => $borrowing->code_number]));
-        Storage::disk('public')->assertExists($borrowing->spj);
+        $disk->assertExists($borrowing->spj);
     }
 
     public function test_admin_can_add_photo_when_updating_existing_item(): void
     {
-        Storage::fake('public');
+        /** @var FilesystemAdapter $disk */
+        $disk = Storage::fake('public');
         $admin = User::factory()->create(['role' => 'admin']);
         $item = Item::create([
             'name' => 'Tandu Lipat',
@@ -91,6 +95,6 @@ class FileUploadTest extends TestCase
         $response->assertRedirect(route('admin.items.index'));
         $item->refresh();
         $this->assertNotNull($item->photo);
-        Storage::disk('public')->assertExists($item->photo);
+        $disk->assertExists($item->photo);
     }
 }
