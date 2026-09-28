@@ -21,9 +21,8 @@ class DashboardController extends Controller
         $approvedBorrowings = Borrowing::where('status', 'approved')->count();
 
         $recentBorrowings = Borrowing::with(['borrowingItems.item'])->latest()->take(5)->get();
-        $lowStockItems = Item::where('available_quantity', '<=', 5)
-            ->where('available_quantity', '>', 0)
-            ->orderBy('available_quantity', 'asc')
+        $lowStockItems = Item::lowStock()
+            ->orderByRaw('available_quantity / NULLIF(total_quantity, 0) asc')
             ->take(5)
             ->get();
 

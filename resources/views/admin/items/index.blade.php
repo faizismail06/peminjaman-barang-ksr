@@ -53,10 +53,10 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">{{ $item->available_quantity }}/{{ $item->total_quantity }}</div>
-                            @if($item->available_quantity <= 5 && $item->available_quantity > 0)
-                                <div class="text-xs text-yellow-600">Stok rendah</div>
-                            @elseif($item->available_quantity == 0)
+                            @if($item->available_quantity == 0)
                                 <div class="text-xs text-red-600">Habis</div>
+                            @elseif($item->isLowStock())
+                                <div class="text-xs text-yellow-600">Stok rendah ({{ $item->stock_percentage }}%)</div>
                             @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">

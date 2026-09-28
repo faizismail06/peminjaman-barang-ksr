@@ -9,6 +9,7 @@ use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class BorrowingController extends Controller
@@ -49,7 +50,7 @@ class BorrowingController extends Controller
             'borrow_date' => 'required|date|after_or_equal:today',
             'return_date' => 'required|date|after:borrow_date',
             'purpose' => 'required|string',
-            'spj' => 'required|file|mimes:pdf|max:5120', // Max 5MB
+            'spj' => 'required|file|mimes:pdf,jpeg,jpg,png,webp|max:5120',
         ]);
 
         $sessionId = $this->getSessionId();
@@ -58,9 +59,6 @@ class BorrowingController extends Controller
         if ($cartItems->isEmpty()) {
             return back()->with('error', 'Keranjang kosong!')->withInput();
         }
-
-        // Upload SPJ
-        $spjPath = $request->file('spj')->store('spj', 'public');
 
         // Hitung total hari dan total biaya
         $borrowDate = \Carbon\Carbon::parse($validated['borrow_date']);
@@ -86,7 +84,10 @@ class BorrowingController extends Controller
         }
 
         DB::beginTransaction();
+        $spjPath = null;
         try {
+            $spjPath = $request->file('spj')->store('spj', 'public');
+
             // Buat borrowing
             $borrowing = Borrowing::create([
                 'borrower_name' => $validated['borrower_name'],
@@ -120,6 +121,9 @@ class BorrowingController extends Controller
                 ->with('success', 'Pengajuan peminjaman berhasil dikirim!');
         } catch (\Exception $e) {
             DB::rollBack();
+            if ($spjPath) {
+                Storage::disk('public')->delete($spjPath);
+            }
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
         }
     }

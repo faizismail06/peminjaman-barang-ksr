@@ -105,7 +105,7 @@
                     <div class="flex justify-between items-center p-4 bg-red-50 rounded-lg border border-red-200">
                         <div>
                             <p class="font-semibold text-gray-800">{{ $item->name }}</p>
-                            <p class="text-sm text-gray-600">{{ $item->code }}</p>
+                            <p class="text-sm text-gray-600">{{ $item->available_quantity }}/{{ $item->total_quantity }} unit ({{ $item->stock_percentage }}%)</p>
                         </div>
                         <div class="text-right">
                             <p class="text-2xl font-bold text-red-600">{{ $item->available_quantity }}</p>

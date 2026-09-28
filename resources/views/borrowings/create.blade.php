@@ -91,11 +91,11 @@
                             </div>
 
                             <div class="mb-4">
-                                <label for="spj" class="block text-gray-700 font-semibold mb-2">Upload SPJ (PDF) *</label>
-                                <input type="file" name="spj" id="spj" accept=".pdf"
+                                <label for="spj" class="block text-gray-700 font-semibold mb-2">Upload SPJ *</label>
+                                <input type="file" name="spj" id="spj" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/jpeg,image/png,image/webp"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-crimson focus:border-transparent @error('spj') border-red-500 @enderror" 
                                     required>
-                                <p class="text-sm text-gray-500 mt-1">Format: PDF, Maksimal: 5MB</p>
+                                <p class="text-sm text-gray-500 mt-1">Format: PDF, JPG, PNG, atau WEBP. Maksimal 5MB.</p>
                                 @error('spj')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror

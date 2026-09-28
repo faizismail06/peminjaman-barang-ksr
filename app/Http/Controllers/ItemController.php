@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class ItemController extends Controller
 {
@@ -21,7 +22,9 @@ class ItemController extends Controller
 
     public function create()
     {
-        return view('admin.items.create');
+        return view('admin.items.create', [
+            'categories' => config('items.categories'),
+        ]);
     }
 
     public function store(Request $request)
@@ -29,11 +32,11 @@ class ItemController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category' => 'required|string',
+            'category' => ['required', Rule::in(config('items.categories'))],
             'total_quantity' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0',
             'condition' => 'required|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ]);
 
         $validated['available_quantity'] = $validated['total_quantity'];
@@ -54,7 +57,10 @@ class ItemController extends Controller
 
     public function edit(Item $item)
     {
-        return view('admin.items.edit', compact('item'));
+        return view('admin.items.edit', [
+            'item' => $item,
+            'categories' => config('items.categories'),
+        ]);
     }
 
     public function update(Request $request, Item $item)
@@ -62,11 +68,11 @@ class ItemController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'category' => 'required|string',
+            'category' => ['required', Rule::in(config('items.categories'))],
             'total_quantity' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0',
             'condition' => 'required|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ]);
 
         // Update available quantity based on difference
@@ -74,14 +80,15 @@ class ItemController extends Controller
         $validated['available_quantity'] = $item->available_quantity + $difference;
 
         if ($request->hasFile('photo')) {
-            // Delete old photo
-            if ($item->photo) {
-                Storage::disk('public')->delete($item->photo);
-            }
+            $oldPhoto = $item->photo;
             $validated['photo'] = $request->file('photo')->store('items', 'public');
         }
 
         $item->update($validated);
+
+        if (isset($oldPhoto) && $oldPhoto !== $item->photo) {
+            Storage::disk('public')->delete($oldPhoto);
+        }
 
         return redirect()->route('admin.items.index')->with('success', 'Item berhasil diupdate!');
     }

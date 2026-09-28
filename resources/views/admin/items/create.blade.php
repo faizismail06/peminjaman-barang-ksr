@@ -12,6 +12,17 @@
 <div class="bg-white rounded-lg shadow-md p-8">
     <h2 class="text-2xl font-bold text-gray-800 mb-6">Tambah Barang Baru</h2>
 
+    @if ($errors->any())
+        <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            <p class="font-semibold">Data belum dapat disimpan:</p>
+            <ul class="mt-2 list-disc pl-5">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form action="{{ route('admin.items.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
@@ -20,9 +31,9 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                     Nama Barang <span class="text-red-500">*</span>
                 </label>
-                <input type="text" name="name" value="{{ old('nama_barang') }}" required
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ksr-red focus:border-transparent @error('nama_barang') border-red-500 @enderror">
-                @error('nama_barang')
+                <input type="text" name="name" value="{{ old('name') }}" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ksr-red focus:border-transparent @error('name') border-red-500 @enderror">
+                @error('name')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
@@ -31,9 +42,25 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                     Jumlah Total <span class="text-red-500">*</span>
                 </label>
-                <input type="number" name="total_quantity" value="{{ old('jumlah_total', 0) }}" min="0" required
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ksr-red focus:border-transparent @error('jumlah_total') border-red-500 @enderror">
-                @error('jumlah_total')
+                <input type="number" name="total_quantity" value="{{ old('total_quantity', 0) }}" min="0" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ksr-red focus:border-transparent @error('total_quantity') border-red-500 @enderror">
+                @error('total_quantity')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Kategori <span class="text-red-500">*</span>
+                </label>
+                <select name="category" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ksr-red focus:border-transparent @error('category') border-red-500 @enderror">
+                    <option value="">Pilih kategori</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category }}" @selected(old('category') === $category)>{{ $category }}</option>
+                    @endforeach
+                </select>
+                @error('category')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
@@ -54,12 +81,12 @@
                     Kondisi <span class="text-red-500">*</span>
                 </label>
                 <select name="condition" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ksr-red focus:border-transparent @error('kondisi') border-red-500 @enderror">
-                    <option value="Good" {{ old('kondisi') == 'Good' ? 'selected' : '' }}>Baik</option>
-                    <option value="Minor Damage" {{ old('kondisi') == 'Minor Damage' ? 'selected' : '' }}>Rusak Ringan</option>
-                    <option value="Major Damage" {{ old('kondisi') == 'Major Damage' ? 'selected' : '' }}>Rusak Berat</option>
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ksr-red focus:border-transparent @error('condition') border-red-500 @enderror">
+                    <option value="Good" {{ old('condition') == 'Good' ? 'selected' : '' }}>Baik</option>
+                    <option value="Minor Damage" {{ old('condition') == 'Minor Damage' ? 'selected' : '' }}>Rusak Ringan</option>
+                    <option value="Major Damage" {{ old('condition') == 'Major Damage' ? 'selected' : '' }}>Rusak Berat</option>
                 </select>
-                @error('kondisi')
+                @error('condition')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
@@ -69,9 +96,9 @@
                     Foto Barang
                 </label>
                 <input type="file" name="photo" accept="image/*"
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ksr-red focus:border-transparent @error('foto') border-red-500 @enderror">
-                <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, GIF (Max: 2MB)</p>
-                @error('foto')
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ksr-red focus:border-transparent @error('photo') border-red-500 @enderror">
+                <p class="text-sm text-gray-500 mt-1">Format: JPG, PNG, GIF, WEBP (Maksimal 5MB)</p>
+                @error('photo')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
@@ -81,9 +108,9 @@
                     Deskripsi
                 </label>
                 <textarea name="description" rows="4"
-                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ksr-red focus:border-transparent @error('deskripsi') border-red-500 @enderror"
-                          placeholder="Deskripsi barang (opsional)">{{ old('deskripsi') }}</textarea>
-                @error('deskripsi')
+                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-ksr-red focus:border-transparent @error('description') border-red-500 @enderror"
+                          placeholder="Deskripsi barang (opsional)">{{ old('description') }}</textarea>
+                @error('description')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
